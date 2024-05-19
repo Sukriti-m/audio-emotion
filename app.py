@@ -1,14 +1,15 @@
-from flask import Flask, request, jsonify, after_this_request
+from flask import Flask, request, jsonify
 import tensorflow as tf
 import numpy as np
 import librosa
 from keras.initializers import Orthogonal
 import io
 from werkzeug.utils import secure_filename
-from moviepy.editor import AudioFileClip
+from pydub import AudioSegment
 import tempfile
 
 app = Flask(__name__)
+
 
 # Middleware to set cross-origin isolation headers
 @app.after_request
@@ -31,14 +32,19 @@ def extract_features(audio_file):
 
 
 def convert_webm_to_wav(webm_data):
-    with tempfile.NamedTemporaryFile(suffix='.webm') as temp_input, tempfile.NamedTemporaryFile(
-            suffix='.wav') as temp_output:
+    with tempfile.NamedTemporaryFile(suffix='.webm', delete=False) as temp_input:
         temp_input.write(webm_data)
         temp_input.flush()
-        clip = AudioFileClip(temp_input.name)
-        clip.write_audiofile(temp_output.name, codec='pcm_s16le')
-        temp_output.seek(0)
-        return temp_output.read()
+
+        # Use pydub to convert webm to wav
+        try:
+            audio = AudioSegment.from_file(temp_input.name, format='webm')
+            temp_output = io.BytesIO()
+            audio.export(temp_output, format='wav')
+            temp_output.seek(0)
+            return temp_output.read()
+        except Exception as e:
+            raise ValueError(f"Error converting .webm file: {e}")
 
 
 @app.route('/', methods=['GET'])
@@ -64,7 +70,7 @@ def predict_emotion():
         try:
             audio_data = convert_webm_to_wav(audio_data)
         except Exception as e:
-            return jsonify({'error': f'Error converting .webm file: {e}'}), 400
+            return jsonify({'error': str(e)}), 400
 
     audio_file = io.BytesIO(audio_data)
 
