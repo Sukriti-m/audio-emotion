@@ -2,14 +2,17 @@ from flask import Flask, request, jsonify
 import tensorflow as tf
 import numpy as np
 import librosa
+from keras.initializers import Orthogonal
 import io
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
 # Load the model directly
-model = tf.keras.models.load_model('saved_model/model_audio.h5')
+custom_objects = {'Orthogonal': Orthogonal}
 
+# Load the model
+model = tf.keras.models.load_model('saved_model/model_audio.h5', custom_objects=custom_objects)
 def extract_features(audio_file):
     y, sr = librosa.load(audio_file, sr=None)
     mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40)
