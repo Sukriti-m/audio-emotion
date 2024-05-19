@@ -12,11 +12,11 @@ app = Flask(__name__)
 
 
 # Middleware to set cross-origin isolation headers
-@app.after_request
-def add_cors_headers(response):
-    response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'
-    response.headers['Cross-Origin-Embedder-Policy'] = 'require-corp'
-    return response
+# @app.after_request
+# def add_cors_headers(response):
+#     response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'
+#     response.headers['Cross-Origin-Embedder-Policy'] = 'require-corp'
+#     return response
 
 
 # Load the model directly
