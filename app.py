@@ -10,9 +10,8 @@ app = Flask(__name__)
 
 # Load the model directly
 custom_objects = {'Orthogonal': Orthogonal}
-
-# Load the model
 model = tf.keras.models.load_model('saved_model/model_audio.h5', custom_objects=custom_objects)
+
 def extract_features(audio_file):
     y, sr = librosa.load(audio_file, sr=None)
     mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=40)
@@ -56,7 +55,6 @@ def predict_emotion():
 
     result = emotion_map.get(emotion, 'Unknown')
     return jsonify({'emotion': result})
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
