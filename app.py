@@ -32,6 +32,9 @@ def predict_emotion():
     file = request.files['audio']
     filename = secure_filename(file.filename)
 
+    if not filename.lower().endswith(('.wav', '.mp3')):
+        return jsonify({'error': 'Unsupported audio format. Please upload a .wav or .mp3 file.'}), 400
+
     # Load the audio file from memory
     audio_data = file.read()
     audio_file = io.BytesIO(audio_data)
