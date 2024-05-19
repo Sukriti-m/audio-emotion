@@ -10,7 +10,6 @@ import tempfile
 
 app = Flask(__name__)
 
-
 # Middleware to set cross-origin isolation headers
 @app.after_request
 def add_cors_headers(response):
