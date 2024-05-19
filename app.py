@@ -7,8 +7,10 @@ import io
 from werkzeug.utils import secure_filename
 from moviepy.editor import AudioFileClip
 import tempfile
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Load the model directly
 custom_objects = {'Orthogonal': Orthogonal}
