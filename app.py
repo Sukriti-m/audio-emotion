@@ -8,9 +8,11 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 # Load the model directly
-model = tf.keras.models.load_model('saved_model/model_audio')
-model.save('model_audio.h5', save_format='h5')
-model = tf.keras.models.load_model('model_audio.h5')
+model = tf.keras.models.load_model('saved_model/model_audio.h5')
+
+
+# model.save('model_audio.h5', save_format='h5')
+# model = tf.keras.models.load_model('model_audio.h5')
 
 
 def extract_features(audio_file):
