@@ -1,5 +1,5 @@
-flask
-librosa
-tensorflow
-numpy
-werkzeug
+Flask==3.0.3
+librosa==0.10.1
+tensorflow==2.15.0
+numpy==1.26.2
+werkzeug==3.0.1
