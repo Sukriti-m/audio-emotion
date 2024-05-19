@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, after_this_request
 import tensorflow as tf
 import numpy as np
 import librosa
@@ -7,10 +7,17 @@ import io
 from werkzeug.utils import secure_filename
 from moviepy.editor import AudioFileClip
 import tempfile
-from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+
+
+# Middleware to set cross-origin isolation headers
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Cross-Origin-Opener-Policy'] = 'same-origin'
+    response.headers['Cross-Origin-Embedder-Policy'] = 'require-corp'
+    return response
+
 
 # Load the model directly
 custom_objects = {'Orthogonal': Orthogonal}
