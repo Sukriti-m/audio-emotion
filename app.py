@@ -4,12 +4,13 @@ import numpy as np
 import librosa
 from keras.initializers import Orthogonal
 import io
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 from pydub import AudioSegment
 import tempfile
 
 app = Flask(__name__)
-
+CORS(app)
 
 # Middleware to set cross-origin isolation headers
 # @app.after_request
